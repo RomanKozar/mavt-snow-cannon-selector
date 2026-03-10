@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>MAVT — Вибір Снігової Гармати</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<canvas id="snow-canvas"></canvas>
+
+		<div class="container">
+			<header>
+				<h1>❄ <span>SNOW TEAM</span> — Вибір Снігової Гармати</h1>
+				<p>Багатокритеріальний аналіз альтернатив методом MAVT</p>
+				<div class="badge">MULTI-ATTRIBUTE VALUE THEORY</div>
+			</header>
+
+			<div class="steps" id="steps">
+				<div class="step active" onclick="goStep(0)">
+					<span class="step-num">КРОК 01</span>АЛЬТЕРНАТИВИ
+				</div>
+				<div class="step" onclick="goStep(1)">
+					<span class="step-num">КРОК 02</span>КРИТЕРІЇ
+				</div>
+				<div class="step" onclick="goStep(2)">
+					<span class="step-num">КРОК 03</span>ВАГИ
+				</div>
+				<div class="step" onclick="goStep(3)">
+					<span class="step-num">КРОК 04</span>РЕЗУЛЬТАТ
+				</div>
+			</div>
+
+			<div class="tab-content active" id="tab-0">
+				<div class="section">
+					<div class="section-title">Снігові Гармати — Альтернативи</div>
+					<p
+						style="
+							color: var(--text-dim);
+							font-size: 0.85rem;
+							margin-bottom: 18px;
+						"
+					>
+						Введіть характеристики гарматних пушок. Значення мають відповідати
+						одиницям вимірювання кожного критерію.
+					</p>
+					<div class="grid-3" id="alt-cards"></div>
+					<div class="btn-group">
+						<button class="btn" onclick="addAlternative()">
+							＋ Додати гармату
+						</button>
+						<button class="btn btn-ghost" onclick="resetAlternatives()">
+							⟳ Скинути
+						</button>
+					</div>
+				</div>
+				<div style="text-align: right">
+					<button class="btn" onclick="goStep(1)">Далі: Критерії →</button>
+				</div>
+			</div>
+
+			<div class="tab-content" id="tab-1">
+				<div class="section">
+					<div class="section-title">Критерії оцінювання</div>
+					<div class="formula">
+						Ціннісна функція: v(x) = (x – x_min) / (x_max – x_min) — лінійна
+						нормалізація [0,1]
+					</div>
+					<div id="crit-list"></div>
+					<div class="btn-group">
+						<button class="btn" onclick="addCriterion()">
+							＋ Додати критерій
+						</button>
+						<button class="btn btn-ghost" onclick="resetCriteria()">
+							⟳ Скинути
+						</button>
+					</div>
+				</div>
+				<div
+					style="
+						display: flex;
+						justify-content: space-between;
+						flex-wrap: wrap;
+						gap: 10px;
+					"
+				>
+					<button class="btn btn-ghost" onclick="goStep(0)">← Назад</button>
+					<button class="btn" onclick="goStep(2)">Далі: Ваги →</button>
+				</div>
+			</div>
+
+			<div class="tab-content" id="tab-2">
+				<div class="section">
+					<div class="section-title">
+						Ваги критеріїв <span class="info-tag">сума = 1.00</span>
+					</div>
+					<p
+						style="
+							color: var(--text-dim);
+							font-size: 0.84rem;
+							margin-bottom: 16px;
+						"
+					>
+						Перетягніть слайдери або введіть значення. Сума ваг автоматично
+						нормалізується.
+					</p>
+					<div id="weight-list"></div>
+					<div
+						style="
+							margin-top: 12px;
+							padding: 12px 16px;
+							background: rgba(0, 212, 255, 0.06);
+							border-radius: 8px;
+							border: 1px solid var(--border);
+						"
+					>
+						<span
+							style="
+								font-family: 'Orbitron', monospace;
+								font-size: 0.75rem;
+								color: var(--text-dim);
+							"
+							>СУМА ВАГ:</span
+						>
+						<span
+							id="weight-sum"
+							style="
+								font-size: 1.2rem;
+								font-weight: 700;
+								color: var(--accent);
+								margin-left: 10px;
+							"
+							>1.00</span
+						>
+					</div>
+				</div>
+				<div
+					style="
+						display: flex;
+						justify-content: space-between;
+						flex-wrap: wrap;
+						gap: 10px;
+					"
+				>
+					<button class="btn btn-ghost" onclick="goStep(1)">← Назад</button>
+					<button class="btn" onclick="computeMAVT()">
+						🔍 Розрахувати MAVT
+					</button>
+				</div>
+			</div>
+
+			<div class="tab-content" id="tab-3">
+				<div class="section" id="result-winner"></div>
+
+				<div class="section">
+					<div class="section-title">Підсумкові оцінки MAVT</div>
+					<table class="results-table" id="result-table">
+						<thead>
+							<tr id="result-head"></tr>
+						</thead>
+						<tbody id="result-body"></tbody>
+					</table>
+				</div>
+
+				<div class="section">
+					<div class="section-title">Рейтинг альтернатив</div>
+					<div class="bar-wrap" id="bar-chart"></div>
+				</div>
+
+				<div class="section">
+					<div class="section-title">
+						Часткові ціннісні функції <span class="info-tag">по критеріях</span>
+					</div>
+					<div class="sens-grid" id="sens-cards"></div>
+				</div>
+
+				<div
+					style="
+						display: flex;
+						justify-content: space-between;
+						flex-wrap: wrap;
+						gap: 10px;
+						margin-top: 10px;
+					"
+				>
+					<button class="btn btn-ghost" onclick="goStep(2)">← Назад</button>
+					<button class="btn" onclick="goStep(0)">⟳ Новий розрахунок</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="script.js"></script>
+	</body>
+</html>
