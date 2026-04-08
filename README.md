@@ -2,6 +2,10 @@
 
 > Програмна реалізація багатокритеріального вибору альтернативи методом **Multi-Attribute Value Theory (MAVT)**
 
+[![Live Demo](https://img.shields.io/badge/demo-online-blue.svg?style=for-the-badge)](https://romankozar.github.io/mavt-snow-cannon-selector/)
+[![Methodology](https://img.shields.io/badge/Method-MAVT--Analysis-cyan.svg?style=for-the-badge)](https://github.com/RomanKozar/mavt-snow-cannon-selector)
+[![Version](https://img.shields.io/badge/version-1.0.0-orange.svg?style=for-the-badge)](https://github.com/RomanKozar/mavt-snow-cannon-selector/releases)
+
 ![Головна сторінка](preview.png)
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
